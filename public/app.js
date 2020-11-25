@@ -35,7 +35,15 @@ $(document).ready(function () {
     $.get('/note', function(data){
        
     for(i=0; i < data.data.length; i++) {
-       $('.saved').append(`<li><a href="#">${data.data[i].title}</a></li>`)
+       $('.saved').append(`<li><a id="${data.data[i].title.trim()}" href="#">${data.data[i].title}</a></li>`)
+       $(`#${data.data[i].title}`).on('click', function(){
+           for(i=0; i < data.data.length; i++) {
+               console.log(data.data[i].doc)
+               quill.setContents(JSON.parse(data.data[i].doc));
+           }
+        
+        
+       })
         } 
     
     })
