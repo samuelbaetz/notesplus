@@ -1,22 +1,45 @@
 var express = require('express')
-var data = require('./data/data.js')
+
 var path = require('path')
+const fs = require('fs')
 var app = express()
-var port = 8080
+var port = 2000
 app.use(express.urlencoded({ extended: true}))
 app.use(express.json())
 app.use(express.static('public'))
 
 app.get('/note', function(request, response){
-    return response.json(data)
+
+    fs.readFile('./data/data.json', (err, data) => {
+        var note = JSON.parse(data)
+        response.json(note)
+    })
+   
 })
 
 app.post('/newnote', function(request, response){
     var newNote = request.body
+    
+//     var string = JSON.stringify(newNote, null, 2)
+// fs.writeFile('./data/data.json', string, {flag: 'a+'}, (err) => {
+//     data.data.push(newNote)
+//     console.log(string)
+// })
+fs.readFile('./data/data.json', 'utf-8', function(err, data) {
+	if (err) throw err
 
-    console.log(newNote)
+	var note = JSON.parse(data)
+	note.data.push(newNote)
 
-    data.push(newNote)
+	
+
+	fs.writeFile('./data/data.json', JSON.stringify(note), 'utf-8', function(err) {
+		if (err) throw err
+		console.log('Done!')
+	})
+})
+
+
 
     response.json(newNote)
 })
