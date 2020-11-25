@@ -3,10 +3,14 @@ var express = require('express')
 var path = require('path')
 const fs = require('fs')
 var app = express()
-var port = 2000
+var PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true}))
 app.use(express.json())
 app.use(express.static('public'))
+
+app.get("/", function(req, res) {
+    res.json(path.join(__dirname, "public/index.html"));
+  });
 
 app.get('/note', function(request, response){
 
@@ -47,6 +51,6 @@ fs.readFile('./data/data.json', 'utf-8', function(err, data) {
 
 
 
-app.listen(port,() => {
+app.listen(PORT,() => {
 console.log('daddys home')
 })
